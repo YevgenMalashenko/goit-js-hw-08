@@ -12,15 +12,12 @@ fillUpFormFields();
 refs.formElement.addEventListener('submit', onFormSubmit);
 refs.formElement.addEventListener('input', throttle(onFormInput, 500));
 
+const userInfo = {};
+
 function onFormSubmit(event) {
   event.preventDefault();
-  const {
-    elements: { email, message },
-  } = event.currentTarget;
-
-  const userInfo = {};
-  userInfo.email = `${email.value}`;
-  userInfo.message = `${message.value}`;
+  userInfo[refs.emailElement.name] = refs.emailElement.value;
+  userInfo[refs.messageElement.name] = refs.messageElement.value;
 
   console.log(userInfo);
   event.currentTarget.reset();
@@ -28,17 +25,9 @@ function onFormSubmit(event) {
 }
 
 function onFormInput(event) {
-  if (event.currentTarget) {
-    const {
-      elements: { email, message },
-    } = event.currentTarget;
-
-    const userInfo = {};
-    userInfo.email = `${email.value}`;
-    userInfo.message = `${message.value}`;
-
-    localStorage.setItem('feedback-form-state', JSON.stringify(userInfo));
-  }
+  userInfo[refs.emailElement.name] = refs.emailElement.value;
+  userInfo[refs.messageElement.name] = refs.messageElement.value;
+  localStorage.setItem('feedback-form-state', JSON.stringify(userInfo));
 }
 
 function fillUpFormFields() {

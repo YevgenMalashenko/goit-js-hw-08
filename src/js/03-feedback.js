@@ -7,26 +7,44 @@ const refs = {
   submitButtonElement: document.querySelector('[type = submit]'),
 };
 
-console.log(refs.formElement);
-console.log(refs.emailElement);
-console.log(refs.messageElement);
-console.log(refs.submitButtonElement);
+fillUpFormFields();
 
 refs.formElement.addEventListener('submit', onFormSubmit);
-
-refs.emailElement.addEventListener('input', throttle(onFormInput, 3000));
-refs.messageElement.addEventListener('input', throttle(onFormInput, 3000));
+refs.formElement.addEventListener('input', throttle(onFormInput, 500));
 
 function onFormSubmit(event) {
   event.preventDefault();
-  console.log('sendint form');
-  console.log(event.target[0].value);
-  console.log(event.target[1].value);
+  const {
+    elements: { email, message },
+  } = event.currentTarget;
+
+  const userInfo = {};
+  userInfo.email = `${email.value}`;
+  userInfo.message = `${message.value}`;
+
+  console.log(userInfo);
+  event.currentTarget.reset();
+  localStorage.removeItem('feedback-form-state');
 }
 
-function onFormInput(e) {
-  console.log(e.target.name);
-  // console.log(e.target.value);
-  // formData[e.target.name] = e.target.value;
-  // console.log(formData);
+function onFormInput(event) {
+  const {
+    elements: { email, message },
+  } = event.currentTarget;
+
+  const userInfo = {};
+  userInfo.email = `${email.value}`;
+  userInfo.message = `${message.value}`;
+
+  localStorage.setItem('feedback-form-state', JSON.stringify(userInfo));
+}
+
+function fillUpFormFields() {
+  const savedUserInfo = localStorage.getItem('feedback-form-state');
+  const parsedUserInfo = JSON.parse(savedUserInfo);
+
+  if (savedUserInfo) {
+    refs.emailElement.value = parsedUserInfo.email;
+    refs.messageElement.value = parsedUserInfo.message;
+  }
 }

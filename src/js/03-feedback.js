@@ -28,15 +28,17 @@ function onFormSubmit(event) {
 }
 
 function onFormInput(event) {
-  const {
-    elements: { email, message },
-  } = event.currentTarget;
+  if (event.currentTarget) {
+    const {
+      elements: { email, message },
+    } = event.currentTarget;
 
-  const userInfo = {};
-  userInfo.email = `${email.value}`;
-  userInfo.message = `${message.value}`;
+    const userInfo = {};
+    userInfo.email = `${email.value}`;
+    userInfo.message = `${message.value}`;
 
-  localStorage.setItem('feedback-form-state', JSON.stringify(userInfo));
+    localStorage.setItem('feedback-form-state', JSON.stringify(userInfo));
+  }
 }
 
 function fillUpFormFields() {
